@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cat Stats</title>
+    <link rel="stylesheet" href="{% static 'styles/style.css' %}">
+</head>
+<body>
+<div class="container">
+  <div class="img_container">
+    {% if 'умер' in description %}
+    <img src="{% static 'images/dead.png' %}" alt="image" class="img">
+    {% elif 'ярость' in description %}
+    <img src="{% static 'images/fury.jpg' %}" alt="image" class="img">
+    {% elif level_satiety < 30 %}
+    <img src="{% static 'images/satiety30-.jpg' %}" alt="image" class="img">
+    {% elif level_happy < 20 %}
+    <img src="{% static 'images/happy20-.png' %}" alt="image" class="img">
+    {% elif level_happy < 70 %}
+    <img src="{% static 'images/happy70-.jpg' %}" alt="image" class="img">
+    {% elif level_happy >= 70 %}
+    <img src="{% static 'images/happy70+.jpg' %}" alt="image" class="img">
+    {%endif%}
+  </div>
+  <div class="container_stats">
+    <p>{{ attention }}</p>
+    <p>Кот: {{ cat_name }}</p>
+    <p>Возраст: {{ cat_age }}</p>
+    <p>Уровень счастья: {{ level_happy }} </p>
+    <p>Уровень сытости: {{ level_satiety }} </p>
+    <p>{{ description }}</p>
+  </div>
+  {% if 'умер' in description %}
+  <a href="/">Начать с начала</a>
+  {% else %}
+  <div class="container_form">
+    <form action="/cat_stats" method="post">
+      {% csrf_token %}
+      <select name="action"  required>
+        {% if  action  == "play_cat" %}
+          <option value="play_cat" selected>Поиграть с котом</option>
+        {% else %}
+          <option value="play_cat">Поиграть с котом</option>
+        {%endif%}
+        {% if  action  == "feed_cat" %}
+          <option value="feed_cat" selected>Покормить кота</option>
+        {% else %}
+        <option value="feed_cat">Покормить кота</option>
+        {%endif%}
+        {% if  action  == "power_off" %}
+          <option value="power_off" selected>Уложить спать кота</option>
+        {% else %}
+          <option value="power_off">Уложить спать кота</option>
+        {% endif %}
+      </select>
+      <button type="submit">Подтвердить</button>
+    </form>
+  </div>
+  {%endif%}
+</div>
+</body>
+</html>
